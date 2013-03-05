@@ -71,6 +71,9 @@ class MarkeyCommand(sublime_plugin.TextCommand):
             reDisplayMath = re.compile(r'\\\[(.+?)\\\]', re.MULTILINE | re.DOTALL)
             content = reDisplayMath.sub(self.stripDisplayMath, content)
 
+        # search for code
+        haveCode = re.search(r'^```[a-zA-Z]+', content, re.MULTILINE) is not None
+
         # send to marked and get result
         sp = subprocess.Popen('marked', stdin=subprocess.PIPE, stdout=subprocess.PIPE, bufsize=-1)
         markdown = sp.communicate(content)[0]
@@ -90,12 +93,14 @@ class MarkeyCommand(sublime_plugin.TextCommand):
         # create file contents
         html =  '<!DOCTYPE HTML>\n<html>\n<head>\n'
         html += '<link rel="stylesheet" href="' + settings.get('markdown_css_path') + '">\n'
-        html += '<link rel="stylesheet" href="' + settings.get('highlight_js_css_path') + '">\n'
-        html += '<script src="' + settings.get('jquery_path') + '"></script>\n'
 
-        html += '<script src="' + settings.get('highlight_js_path') + '"></script>\n'
-        html += '<script>\n$(document).ready(function() {\n'
-        html += '$("pre > code[class]").each(function(i, e) { hljs.highlightBlock(e)} );\n});\n</script>\n'
+        if haveCode :
+            html += '<link rel="stylesheet" href="' + settings.get('highlight_js_css_path') + '">\n'
+            html += '<script src="' + settings.get('jquery_path') + '"></script>\n'
+
+            html += '<script src="' + settings.get('highlight_js_path') + '"></script>\n'
+            html += '<script>\n$(document).ready(function() {\n'
+            html += '$("pre > code[class]").each(function(i, e) { hljs.highlightBlock(e)} );\n});\n</script>\n'
 
         if settings.get('parse_math') and (len(self.inlineMathStr) > 0 or len(self.displayMathStr) > 0) :
             html += '<script src="' + settings.get('mathjax_path') + '"></script>\n'
