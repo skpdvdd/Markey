@@ -54,9 +54,6 @@ class MarkeyCommand(sublime_plugin.TextCommand):
         # load settings
         settings = sublime.load_settings('Markey.sublime-settings')
 
-        # get directory of current file
-        self.fileDir = os.path.dirname(self.view.file_name())
-
         # get content
         region = sublime.Region(0, self.view.size())
         content = self.view.substr(region)
@@ -78,9 +75,11 @@ class MarkeyCommand(sublime_plugin.TextCommand):
         sp = subprocess.Popen('marked', stdin=subprocess.PIPE, stdout=subprocess.PIPE, bufsize=-1)
         markdown = sp.communicate(content)[0]
 
-        # fix relative links
-        reSrc = re.compile(r'src="(.+?)"')
-        markdown = reSrc.sub(self.fixLinks, markdown)
+        # fix relative links if required
+        if self.view.file_name() is not None :
+            self.fileDir = os.path.dirname(self.view.file_name())
+            reSrc = re.compile(r'src="(.+?)"')
+            markdown = reSrc.sub(self.fixLinks, markdown)
 
         # replace math if needed
         if settings.get('parse_math') :
@@ -114,7 +113,8 @@ class MarkeyCommand(sublime_plugin.TextCommand):
         html += '</body>\n</html>\n'
 
         # write to temp file
-        f = tempfile.NamedTemporaryFile(delete=False)
+        fname = os.path.join(tempfile.gettempdir(), 'markey-' + str(self.view.buffer_id()) + '.html')
+        f = open(fname, 'w')
         f.write(html.encode('utf-8'))
         f.close()
         
