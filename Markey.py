@@ -20,9 +20,16 @@
 import sublime, sublime_plugin
 import subprocess, tempfile, webbrowser, re, os
 
-class MarkeyCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
-        self.convert()
+class MarkeyListener(sublime_plugin.EventListener) :
+    def on_post_save(self, view) :
+        if view.file_name().endswith(('.md', '.markdown', '.mdown')) :
+            settings = sublime.load_settings('Markey.sublime-settings')
+            if settings.get('auto_convert') :
+                view.run_command('markey', { 'forceBrowserOpen': False })
+
+class MarkeyCommand(sublime_plugin.TextCommand) :
+    def run(self, edit, forceBrowserOpen = True) :
+        self.convert(forceBrowserOpen)
 
     # fix relative links
     def fixLinks(self, match) :
@@ -50,7 +57,7 @@ class MarkeyCommand(sublime_plugin.TextCommand):
     def replaceDisplayMath(self, match) :
         return '\\[' + self.displayMathStr[int(match.group(1))] + '\\]'
 
-    def convert(self):
+    def convert(self, forceBrowserOpen = True) :
         # load settings
         settings = sublime.load_settings('Markey.sublime-settings')
 
@@ -93,6 +100,7 @@ class MarkeyCommand(sublime_plugin.TextCommand):
         html =  '<!DOCTYPE HTML>\n<html>\n<head>\n'
         html += '<link rel="stylesheet" href="' + settings.get('markdown_css_path') + '">\n'
 
+        # highlight.js support
         if haveCode :
             html += '<link rel="stylesheet" href="' + settings.get('highlight_js_css_path') + '">\n'
             html += '<script src="' + settings.get('jquery_path') + '"></script>\n'
@@ -101,6 +109,7 @@ class MarkeyCommand(sublime_plugin.TextCommand):
             html += '<script>\n$(document).ready(function() {\n'
             html += '$("pre > code[class]").each(function(i, e) { hljs.highlightBlock(e)} );\n});\n</script>\n'
 
+        # MathJax support
         if settings.get('parse_math') and (len(self.inlineMathStr) > 0 or len(self.displayMathStr) > 0) :
             html += '<script src="' + settings.get('mathjax_path') + '"></script>\n'
             html += '<script type="text/x-mathjax-config">\nMathJax.Hub.Config({\ntex2jax: {\n'
@@ -108,15 +117,32 @@ class MarkeyCommand(sublime_plugin.TextCommand):
             html += 'displayMath: [["\\\\[","\\\\]"]]\n'
             html += '}});\n</script>\n'
 
+        # LiveReload support
+        if 'LiveReload' in os.listdir(sublime.packages_path()) :
+            html += '<script>document.write(\'<script src="http://\' + (location.host || \'localhost\').split(\':\')[0] + \':35729/livereload.js?snipver=1"></\' + \'script>\')</script>\n'
+
         html += '</head>\n\n<body>\n'
         html += markdown
         html += '</body>\n</html>\n'
+
+        # check if file already exists
+        fileExisted = os.path.isfile(os.path.join(tempfile.gettempdir(), 'markey-' + str(self.view.buffer_id()) + '.html'))
 
         # write to temp file
         fname = os.path.join(tempfile.gettempdir(), 'markey-' + str(self.view.buffer_id()) + '.html')
         f = open(fname, 'w')
         f.write(html.encode('utf-8'))
         f.close()
+
+
+        # if we have LiveReload and the file is already there, we bail
+        if not forceBrowserOpen and fileExisted and 'LiveReload' in os.listdir(sublime.packages_path()) :
+            return
         
-        # open file in browser (linux: might need to set BROWSER envvar)
-        webbrowser.open(f.name)
+        # if not, open file in default browser, unless specified
+        if settings.get('browser') == 'default' :
+            if not webbrowser.open(f.name) :
+                print('Markey: could not open default browser.')
+        else :
+            if subprocess.call([ settings.get('browser'), f.name ]) :
+                print('Markey: could not open browser "' + settings.get('browser') + '".')

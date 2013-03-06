@@ -2,7 +2,7 @@
 Markey
 ======
 
-**[Markey](https://github.com/skpdvdd/Markey)** is a tiny [markdown](http://daringfireball.net/projects/markdown/) parser package for [Sublime Text 2](http://www.sublimetext.com/).
+**[Markey](https://github.com/skpdvdd/Markey)** is a [markdown](http://daringfireball.net/projects/markdown/) parser package for [Sublime Text 2](http://www.sublimetext.com/).
 
 Installation
 ------------
@@ -40,11 +40,15 @@ Code highlighting is supported via [highlight.js](http://softwaremaniacs.org/sof
     print('hello')
     ```
 
-To parse a markdown file, save it somewhere and then call Markey. You might want to add a key binding, e.g.:
+Call Markey to convert the currently open buffer to markdown. You might want to add a key binding, e.g.:
 
     { "keys": ["alt+m"], "command": "markey" }
 
-The parsed file will be opened in a new default browser window. The Python version Sublime Text 2 uses currently seems not to support Chrome though.
+The parsed file will be opened in a new default browser window. The Python version Sublime Text 2 uses currently does not support all browsers, at least not on Linux. To account for this you can specify the browser name to call manually in the configuration file (e.g. `chromium`).
+
+If the `auto_convert` setting is `true` Markey will be called automatically if a file with the ending `.md`, `.markdown` or `.mdown` is saved. If you do not want this behaviour, set the setting to `false`.
+
+Calling Markey will open a new browser even if the file is already open. Install the [LiveReload](https://github.com/dz0ny/LiveReload-sublimetext2) plugin if you don't want this behaviour.
 
 License
 -------

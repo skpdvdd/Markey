@@ -1,4 +1,6 @@
 {
+    "browser" : "chromium",
+    "auto_convert" : true,
     "parse_math" : true,
     "markdown_css_path" : "/home/chris/Documents/markdown/markdown.css",
     "jquery_path" : "http://code.jquery.com/jquery-1.9.1.min.js",
