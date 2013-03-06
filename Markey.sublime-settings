@@ -1,8 +1,8 @@
 {
-    "browser" : "chromium",
+    "browser" : "default",
     "auto_convert" : true,
     "parse_math" : true,
-    "markdown_css_path" : "/home/chris/Documents/markdown/markdown.css",
+    "markdown_css_path" : "default",
     "jquery_path" : "http://code.jquery.com/jquery-1.9.1.min.js",
     "highlight_js_path" : "http://yandex.st/highlightjs/7.3/highlight.min.js",
     "highlight_js_css_path" : "http://yandex.st/highlightjs/7.3/styles/default.min.css",

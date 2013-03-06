@@ -98,7 +98,11 @@ class MarkeyCommand(sublime_plugin.TextCommand) :
 
         # create file contents
         html =  '<!DOCTYPE HTML>\n<html>\n<head>\n'
-        html += '<link rel="stylesheet" href="' + settings.get('markdown_css_path') + '">\n'
+
+        if settings.get('markdown_css_path') == 'default' :
+            html += '<link rel="stylesheet" href="file://' + os.path.join(sublime.packages_path(), 'Markey', 'Markey.css') + '">\n'
+        else :
+            html += '<link rel="stylesheet" href="' + settings.get('markdown_css_path') + '">\n'
 
         # highlight.js support
         if haveCode :
@@ -144,5 +148,5 @@ class MarkeyCommand(sublime_plugin.TextCommand) :
             if not webbrowser.open(f.name) :
                 print('Markey: could not open default browser.')
         else :
-            if subprocess.call([ settings.get('browser'), f.name ]) :
+            if subprocess.Popen([ settings.get('browser'), f.name ]) :
                 print('Markey: could not open browser "' + settings.get('browser') + '".')

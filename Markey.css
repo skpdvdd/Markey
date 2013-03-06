@@ -1,0 +1,29 @@
+
+body {
+    color: #444;
+    font: 11pt sans-serif;
+    padding: 0 1em;
+}
+
+a {
+    color: #0069cb;
+}
+
+a:hover {
+    color: #0084ff;
+}
+
+img {
+    display: block;
+    margin: 0 auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+}
+
+pre, code {
+    font: #222;
+    font: 10pt monospace;
+    background-color: #eee;
+}

@@ -20,7 +20,7 @@ To install Markey, clone the repository inside Sublime Text's `Packages` folder,
 Configuration
 -------------
 
-The file `Markey.sublime-settings` contains a default configuration that should work out of the box. The only thing you need to change is the path to the CSS file you want to use for formatting the HTML. To do so edit `Markey.sublime-settings` or better create a file called `Markey.sublime-settings` inside the `Packages/User` folder, and change what you want, like so:
+The file `Markey.sublime-settings` contains a default configuration that should work out of the box. To change the configuration edit `Markey.sublime-settings` or better create a file called `Markey.sublime-settings` inside the `Packages/User` folder, like so:
 
     {
         "markdown_css_path" : "path/to/your/css/file",
@@ -44,9 +44,7 @@ Call Markey to convert the currently open buffer to markdown. You might want to 
 
     { "keys": ["alt+m"], "command": "markey" }
 
-The parsed file will be opened in a new default browser window. The Python version Sublime Text 2 uses currently does not support all browsers, at least not on Linux. To account for this you can specify the browser name to call manually in the configuration file (e.g. `chromium`).
-
-If the `auto_convert` setting is `true` Markey will be called automatically if a file with the ending `.md`, `.markdown` or `.mdown` is saved. If you do not want this behaviour, set the setting to `false`.
+The parsed file will be opened in a new default browser window. The Python version Sublime Text 2 uses currently does not support all browsers, at least not on Linux. To account for this you can specify the browser name to call manually in the configuration file (e.g. `chromium`). If the `auto_convert` setting is `true` Markey will be called automatically if a file with the ending `.md`, `.markdown` or `.mdown` is saved. If you do not want this behaviour, set the setting to `false`.
 
 Calling Markey will open a new browser even if the file is already open. Install the [LiveReload](https://github.com/dz0ny/LiveReload-sublimetext2) plugin if you don't want this behaviour.
 
