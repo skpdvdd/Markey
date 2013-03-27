@@ -12,7 +12,7 @@
     <key>name</key>
     <string>Markey - Markdown</string>
     <key>scopeName</key>
-    <string>source.markdown</string>
+    <string>text.markdown</string>
     <key>patterns</key>
     <array>
         <dict>
@@ -21,7 +21,7 @@
             <key>name</key>
             <string>markey.math</string>
             <key>match</key>
-            <string>\$\$\S.+?\S\$\$</string>
+            <string>\$\$\S.*?\$\$</string>
         </dict>
         <dict>
             <key>comment</key>
@@ -49,7 +49,7 @@
             <key>name</key>
             <string>markdown.em</string>
             <key>match</key>
-            <string>(\*{1,2}|_{1,2})\S.+?\S(\*{1,2}|_{1,2})</string>
+            <string>(\*{1,2}|_{1,2})\S.*?(\*{1,2}|_{1,2})</string>
         </dict>
         <dict>
             <key>comment</key>
@@ -65,7 +65,7 @@
             <key>name</key>
             <string>markdown.code</string>
             <key>match</key>
-            <string>\`\S.+?\S\`</string>
+            <string>\`\S.*?\`</string>
         </dict>
         <dict>
             <key>comment</key>
