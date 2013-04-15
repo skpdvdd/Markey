@@ -80,7 +80,8 @@ class MarkeyCommand(sublime_plugin.TextCommand) :
 
         # send to marked and get result
         sp = subprocess.Popen('marked', stdin=subprocess.PIPE, stdout=subprocess.PIPE, bufsize=-1)
-        markdown = sp.communicate(content)[0]
+        markdown = sp.communicate(content.encode('utf8'))[0]
+        markdown = markdown.decode('utf8')
 
         # fix relative links if required
         if self.view.file_name() is not None :
