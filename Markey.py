@@ -98,7 +98,7 @@ class MarkeyCommand(sublime_plugin.TextCommand) :
             markdown = reDisplayMath.sub(self.replaceDisplayMath, markdown)
 
         # create file contents
-        html =  '<!DOCTYPE HTML>\n<html>\n<head>\n'
+        html =  '<!DOCTYPE HTML>\n<html>\n<head>\n<meta charset="utf-8">\n'
 
         if settings.get('markdown_css_path') == 'default' :
             html += '<link rel="stylesheet" href="file://' + os.path.join(sublime.packages_path(), 'Markey', 'Markey.css') + '">\n'
