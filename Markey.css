@@ -27,6 +27,7 @@ pre, code {
     color: #222;
     font: 10pt monospace;
     background-color: #eee;
+    white-space: pre-wrap;
 }
 
 blockquote {
